@@ -1,4 +1,3 @@
-
 # bashrc for zoo users
 # we want to make bash sort of like the tcsh they have grown to expect
 
@@ -58,21 +57,13 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ccd='cd ~/ && clear'
-alias cdd='cd /home/eebs/Desktop/'
-alias ccdd='cd /home/eebs/Desktop/ && clear'
 alias p='pwd'
 alias h=history
 alias c=clear
-alias reloada='source ~/.bash_aliases'
 alias 'icommandyoutodie'='exit'
-alias log='sudo nano /var/log/vsftpd.log'
-alias ud='sudo perl /home/eebs/parsevsftpd.pl'
-alias usage='df -h |grep /mnt/media |cut -c 41-43'
-alias restart='sh /home/eebs/restartserver.sh'
-alias apt='sudo apt-get install'
 
 #Git
-alias gis='git status'
+alias gs='git status'
 alias gc='git commit'
 alias gb='git branch'
 alias ga='git add'
@@ -86,10 +77,7 @@ alias tree='tree --charset ISO8859-1'
 alias gi='git checkout import'
 alias gm='git checkout master'
 
-
 shopt -s cdspell histappend 
 
 set -o noclobber
-
-
 
