@@ -1,104 +1,95 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
 
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
-
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-HISTCONTROL=ignoredups:ignorespace
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
+# bashrc for zoo users
+# we want to make bash sort of like the tcsh they have grown to expect
 
 
-export EC2_PRIVATE_KEY=$HOME/aws/pk-AX35VAMBVUGJHPPPSOABJK4RTVYITC3J.pem
-export EC2_CERT=$HOME/aws/cert-AX35VAMBVUGJHPPPSOABJK4RTVYITC3J.pem
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk/
+PATH="/usr/sbin:/sbin:/bin:/usr/bin:/etc:/usr/ucb:/usr/local/bin:/usr/local/local_dfs/bin:/usr/bin/X11:/usr/local/sas:."
+MANPATH="/usr/share/man:/usr/local/man:/usr/local/local_dfs/man"
+PAGER=less
+EDITOR=vim
+HISTFILESIZE=50
+ORGANIZATION="University of Vermont"
+
+export PATH MANPATH PAGER EDITOR HISTFILESIZE ORGANIZATION
+
+# Uncomment the following lines if you are an ARC/INFO user
+#alias arc=/usr/local/bin/arc
+#alias arcdoc=/usr/local/bin/arcdoc
+#alias info=/usr/local/bin/arcinfo
+
+unset MAILCHECK  # We don't have spoolfiles stored locally any longer
+
+tty -s && mesg n
+
+
+
+case $TERM in
+    xterm*)
+    PS1='\[\e]0;\u@zoo: \w\a\]\u@zoo \w> ';;
+    screen)
+    PS1='\[\e_\u@zoo: \w\e\\\]\u@zoo \w> ';;
+    *)
+    PS1='\u@zoo \w> ';;
+esac 
+
+export PS1
+
+
+# aliases from 'ol EMBA tcs
+alias bye=logout
+alias h=history
+alias jobs='jobs -l'
+alias lf='ls -algF'
+alias log=logout
+alias cls=clear
+alias edit=$EDITOR
+alias restore=/usr/local/local_dfs/bin/restore
+
+#From EEBS
+#Safety
+alias rm='rm -i'
+alias cp='cp -i'
+alias ln='ln -i'
+
+#Convenience redefinitions
+alias lsl='ls -l'
+alias lsla='ls -la'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ccd='cd ~/ && clear'
+alias cdd='cd /home/eebs/Desktop/'
+alias ccdd='cd /home/eebs/Desktop/ && clear'
+alias p='pwd'
+alias h=history
+alias c=clear
+alias reloada='source ~/.bash_aliases'
+alias 'icommandyoutodie'='exit'
+alias log='sudo nano /var/log/vsftpd.log'
+alias ud='sudo perl /home/eebs/parsevsftpd.pl'
+alias usage='df -h |grep /mnt/media |cut -c 41-43'
+alias restart='sh /home/eebs/restartserver.sh'
+alias apt='sudo apt-get install'
+
+#Git
+alias gis='git status'
+alias gc='git commit'
+alias gb='git branch'
+alias ga='git add'
+alias gaa='git add --all'
+alias gh='git push'
+alias gl='git pull'
+alias gg='git log --stat="120,120" --color'
+alias gw='git-wtf'
+alias gp='git log --graph --oneline --all'
+alias tree='tree --charset ISO8859-1'
+alias gi='git checkout import'
+alias gm='git checkout master'
+
+
+shopt -s cdspell histappend 
+
+set -o noclobber
+
+
+
